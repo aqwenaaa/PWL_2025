@@ -4,10 +4,11 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-use Carbon\Carbon;
+use Carbon\Carbon; //utk timestamp create
 
 class TPenjualanDetailSeeder extends Seeder
 {
+
     public function run(): void
     {
         $data = [
