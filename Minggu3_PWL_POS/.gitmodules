@@ -1,6 +1,0 @@
-[submodule "Minggu2"]
-	path = Minggu2
-	url = https://github.com/aqwenaaa/www.git
-[submodule "tugasPOS"]
-	path = tugasPOS
-	url = https://github.com/aqwenaaa/POS-Laravel.git
