@@ -69,7 +69,7 @@ Route::group(['prefix' => 'level'], function () {
     Route::put('/{id}/update_ajax', [LevelController::class, 'update_ajax']); // Menyimpan perubahan data level Ajax
     Route::get('/{id}/delete_ajax', [LevelController::class, 'confirm_ajax']); // Untuk tampilkan form confirm delete level Ajax
     Route::delete('/{id}/delete_ajax', [LevelController::class, 'delete_ajax']); // Untuk hapus data level Ajax
-    Route::get('/{id}', [LevelController::class, 'show']); // menampilkan detail level
+    Route::get('/{id}', [LevelController::class, 'show']);       // menampilkan detail user
     Route::get('/{id}/edit', [LevelController::class, 'edit']); // menampilkan halaman form edit level
     Route::put('/{id}', [LevelController::class, 'update']); // menyimpan perubahan data level
     Route::delete('/{id}', [LevelController::class, 'destroy']); // menghapus data level
@@ -142,4 +142,18 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middl
 
 Route::middleware(['auth'])->group(function () { // Menentukan rute yang hanya bisa diakses oleh pengguna yang sudah login
 // Tambahkan rute yang memerlukan autentikasi di sini
+});
+
+Route::middleware(['auth'])->group(function () { // Rute ini hanya bisa diakses oleh pengguna yang sudah login
+    Route::get('/', [WelcomeController::class, 'index']); // Menampilkan halaman utama
+
+    Route::middleware(['authorize:ADM'])->group(function () { // Rute ini hanya bisa diakses oleh admin (ADM)
+        Route::get('/level', [LevelController::class, 'index']); // Menampilkan daftar level
+        Route::get('/level/list', [LevelController::class, 'list'])->name('level.list'); // Mengambil daftar level dalam bentuk POST (mungkin untuk AJAX)
+        Route::get('/level/create', [LevelController::class, 'create']); // Menampilkan form untuk membuat level baru
+        Route::post('/level', [LevelController::class, 'store']); // Menyimpan data level baru
+        Route::get('/level/{id}/edit', [LevelController::class, 'edit']); // Menampilkan form edit level berdasarkan ID
+        Route::put('/level/{id}', [LevelController::class, 'update']); // Memperbarui level berdasarkan ID
+        Route::delete('/level/{id}', [LevelController::class, 'destroy']); // Menghapus level berdasarkan ID
+    });
 });
