@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Validator;
 use PhpParser\Node\Expr\Cast\String_;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class UserController extends Controller {
     public function index()
@@ -149,6 +150,19 @@ class UserController extends Controller {
         
         return view('user.create_ajax')->with('level', $level);
     }
+
+    //show ajax
+    public function show_ajax(string $id)
+    {
+        $user = UserModel::with('level')->find($id); // with('level') jika ada relasi ke level
+
+        if (!$user) {
+            return response()->json(['status' => false, 'message' => 'Data tidak ditemukan'], 404);
+        }
+
+        return view('user.show_ajax', ['user' => $user]);
+    }
+
 
     public function store_ajax(Request $request)
     {
@@ -303,6 +317,63 @@ class UserController extends Controller {
         $user = UserModel::find($id);
         $user->delete();
         return redirect('/user');
+    }
+    //Menampilkan form import user
+    public function import()
+    {
+        return view('user.import');
+    }
+    //Proses import user dari file excel
+    public function import_ajax(Request $request)
+    {
+        if ($request->ajax() || $request->wantsJson()) {
+            $rules = [
+                'file_user' => ['required', 'mimes:xlsx', 'max:1024']
+            ];
+            $validator = Validator::make($request->all(), $rules);
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Validasi Gagal',
+                    'msgField' => $validator->errors()
+                ]);
+            }
+    
+            $file = $request->file('file_user');
+            $reader = IOFactory::createReader('Xlsx');
+            $reader->setReadDataOnly(true);
+            $spreadsheet = $reader->load($file->getRealPath());
+            $sheet = $spreadsheet->getActiveSheet();
+            $data = $sheet->toArray(null, false, true, true);
+    
+            $insert = [];
+            if (count($data) > 1) {
+                foreach ($data as $row => $value) {
+                    if ($row > 1) { // Skip header row
+                        $insert[] = [
+                            'user_id' => $value['A'],
+                            'username' => $value['B'],
+                            'nama' => $value['C'],
+                            'level_id' => $value['D'],
+                            'password' => bcrypt('password'), // Default password; adjust as needed
+                            'created_at' => now(),
+                        ];
+                    }
+                }
+                if (count($insert) > 0) {
+                    UserModel::insertOrIgnore($insert);
+                    return response()->json([
+                        'status' => true,
+                        'message' => 'Data berhasil diimport'
+                    ]);
+                }
+            }
+            return response()->json([
+                'status' => false,
+                'message' => 'Tidak ada data yang diimport'
+            ]);
+        }
+        return redirect('/');
     }
          //find : karena ada satu record di database yg id nya 1, maka akan menampilkan record yg id nya 1
         //first : karena kita ingin menampilkan record pertama yg memiliki level_id 1, maka akan menampilkan record yg id nya 1
