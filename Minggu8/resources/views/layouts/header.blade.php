@@ -122,24 +122,47 @@
       </div>
     </li>
     <li class="nav-item">
-      <a href="{{ route('logout') }}" class="btn btn-danger btn-sm"
-         onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-          Logout
-      </a>
-      <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-          @csrf
-      </form>
-  </li>
-  
-  <li class="nav-item">
       <a class="nav-link" data-widget="fullscreen" href="#" role="button">
-          <i class="fas fa-expand-arrows-alt"></i>
+        <i class="fas fa-expand-arrows-alt"></i>
       </a>
-  </li>
+    </li>
     <li class="nav-item">
       <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#" role="button">
         <i class="fas fa-th-large"></i>
       </a>
+    </li>
+
+    <!-- User profile dropdown -->
+    <li class="nav-item dropdown user-menu">
+      <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
+        <img
+          src="{{ auth()->user()->foto_profil ? asset('storage/' . auth()->user()->foto_profil) : asset('img/default-profile.png') }}"
+          class="user-image img-circle elevation-1" alt="User Image">
+        <span class="d-none d-md-inline">{{ auth()->user()->nama }}</span>
+      </a>
+      <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+        <!-- User image -->
+        <li class="user-header bg-primary">
+          <img
+            src="{{ auth()->user()->foto_profil ? asset('storage/' . auth()->user()->foto_profil) : asset('img/default-profile.png') }}"
+            class="img-circle elevation-2" alt="User Image">
+          <p>
+            {{ auth()->user()->nama }}
+            <small>{{ auth()->user()->level->level_nama ?? 'User' }}</small>
+          </p>
+        </li>
+        <!-- Menu Footer-->
+        <li class="user-footer">
+          <a href="{{ url('/profile') }}" class="btn btn-secondary btn-flat">Profile</a>
+          <a href="#" class="btn btn-warning btn-flat float-right"
+            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+            Logout
+          </a>
+          <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+            @csrf
+          </form>
+        </li>
+      </ul>
     </li>
   </ul>
 </nav>
