@@ -48,6 +48,7 @@ Route::middleware(['auth'])->group(function () {
             Route::get('import', [UserController::class, 'import']); // ajax form upload excel
             Route::post('import_ajax', [UserController::class, 'import_ajax']); // ajax import excel
             Route::get('export_excel', [UserController::class, 'export_excel']); //export excel
+            Route::get('export_pdf', [UserController::class, 'export_pdf']); //export pdf
         });
     });
 
@@ -76,7 +77,8 @@ Route::middleware(['auth'])->group(function () {
             Route::get('import', [LevelController::class, 'import']); // ajax form upload excel
             Route::post('import_ajax', [LevelController::class, 'import_ajax']); // ajax import excel
             Route::get('export_excel', [LevelController::class, 'export_excel']); //export excel
-                        Route::get('export_excel', [SupplierController::class, 'export_excel']); //export excel
+            Route::get('export_excel', [LevelController::class, 'export_excel']); //export excel
+            Route::get('export_pdf', [LevelController::class, 'export_pdf']); //export pdf
         });
     });
 
@@ -106,6 +108,7 @@ Route::middleware(['auth'])->group(function () {
             Route::get('import', [KategoriController::class, 'import']); // ajax form upload excel
             Route::post('import_ajax', [KategoriController::class, 'import_ajax']); // ajax import excel
             Route::get('export_excel', [KategoriController::class, 'export_excel']); //export excel
+            Route::get('export_pdf', [KategoriController::class, 'export_pdf']); //export pdf
         });
     });
     
@@ -135,6 +138,9 @@ Route::middleware(['auth'])->group(function () {
              Route::get('/import', [BarangController::class, 'import']); // ajax form upload excel
              Route::post('/import_ajax', [BarangController::class, 'import_ajax']); // AJAX import excel
              Route::get('export_excel', [BarangController::class, 'export_excel']); //export excel
+             Route::get('export_pdf', [BarangController::class, 'export_pdf']); //export pdf
+             Route::get('export_pdf', [BarangController::class, 'export_pdf']); //export pdf
+
         });
     });
 
@@ -165,6 +171,7 @@ Route::middleware(['auth'])->group(function () {
             Route::post('import_ajax', [SupplierController::class, 'import_ajax']); // ajax import excel
             Route::post('/store', [SupplierController::class, 'store'])->name('supplier.store');
             Route::get('export_excel', [SupplierController::class, 'export_excel']); //export excel
+            Route::get('export_pdf', [SupplierController::class, 'export_pdf']); //export pdf
         });
     });
 });

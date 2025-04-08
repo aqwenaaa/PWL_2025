@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Validator;
 use PhpParser\Node\Expr\Cast\String_;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class UserController extends Controller {
     public function index()
@@ -437,7 +438,24 @@ class UserController extends Controller {
              $writer->save('php://output');
              exit;
          }
-         
+        
+        public function export_pdf()
+        {
+            set_time_limit(0); // set waktu eksekusi tidak terbatas
+            
+             $users = UserModel::select('user_id', 'username', 'nama', 'level_id')
+                 ->orderBy('user_id')
+                 ->with('level')
+                 ->get();
+ 
+             // use Barryvdh\DomPDF\Facade\Pdf;
+             $pdf = Pdf::loadView('user.export_pdf', ['user' => $users]);
+             $pdf->setPaper('a4', 'portrait'); // set ukuran kertas dan orientasi
+             $pdf->setOption("isRemoteEnabled", true); // set true jika ada gambar dari url
+             $pdf->render();
+ 
+             return $pdf->stream('Data user ' . date('Y-m-d H:i:s') . '.pdf');
+        }
  
          //find : karena ada satu record di database yg id nya 1, maka akan menampilkan record yg id nya 1
         //first : karena kita ingin menampilkan record pertama yg memiliki level_id 1, maka akan menampilkan record yg id nya 1
