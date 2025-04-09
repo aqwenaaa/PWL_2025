@@ -10,3 +10,8 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;
 }
+
+//Generating URL
+$url = route('profile');
+//Generating Redirects
+return redirect()->route('profile');
