@@ -1,88 +1,42 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ItemController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\KategoriController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\SalesController;
+use App\Http\Controllers\LevelController;
 
-Route::get('/hello', function () { return 'Hello World';
+// Halaman Home
+Route::get('/', [HomeController::class, 'index']);
+
+// Halaman Products dengan prefix kategori
+Route::prefix('category')->group(function () {
+    Route::get('/food-beverage', [ProductController::class, 'foodBeverage']);
+    Route::get('/beauty-health', [ProductController::class, 'beautyHealth']);
+    Route::get('/home-care', [ProductController::class, 'homeCare']);
+    Route::get('/baby-kid', [ProductController::class, 'babyKid']);
 });
 
-Route::get('/world', function () { return 'World';
-});
+// Halaman User dengan parameter
+// Route::get('/user/{id}/name/{name}', [UserController::class, 'profile']);
 
-Route::get('/user/{name}', function ($name) { return 'Nama saya '.$name;
-});
+// Halaman Penjualan
+Route::get('/sales', [SalesController::class, 'index']);
 
-Route::get('/posts/{post}/comments/{comment}', function ($postId, $commentId) {
-    return 'Pos ke-'.$postId." Komentar ke-: ".$commentId;
-    });
+Route::get('/level', [LevelController::class, 'index']);
 
-Route::get('/user/{name?}', function ($name=null) {
-return 'Nama saya '.$name;
-});
+Route::get('/kategori', [KategoriController::class, 'index']);
 
-Route::get('/user/{name?}', function ($name='John') { return 'Nama saya '.$name;
-});
+Route::get('/user', [UserController::class, 'index']);
 
+Route::get('/user/tambah', [UserController::class, 'tambah']);
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::post('/user/tambah_simpan', [UserController::class, 'tambah_simpan']);
 
-use App\Http\Controllers\UserProfileController;
+Route::get('/user/ubah/{id}', [UserController::class, 'ubah']);
 
-Route::get('/user/profile', function () {
-    //
-})->name('profile');
+Route::put('/user/ubah_simpan/{id}', [UserController::class, 'ubah_simpan']);
 
-Route::get('/user/profile', 
-    [UserProfileController::class, 'show'])->name('profile');
-
-//Generating URL
-//$url = route('profile');
-//Generating Redirects
-// return redirect()->route('profile');
-
-Route::get('/user/{name?}', function ($name='John') { return 'Nama saya '.$name;
-});
-
-Route::view('/welcome', 'welcome', ['name' => 'Aqueena']);
-
-use App\Http\Controllers\WelcomeController;
-
-Route::get('/hello', [WelcomeController::class, 'hello']);
-
-use App\Http\Controllers\PageController;
-// Route untuk halaman utama
-Route::get('/', [PageController::class, 'index']);
-
-// Route untuk halaman about
-Route::get('/about', [PageController::class, 'about']);
-
-// Route untuk halaman artikel dengan ID dinamis
-Route::get('/articles/{id}', [PageController::class, 'articles']);
-
-use App\Http\Controllers\PhotoController;
-// Membuat semua route CRUD untuk PhotoController
-Route::resource('photos', PhotoController::class);
-
-Route::get('/greeting', function () {
-    return view('hello', ['name' => 'Aqueena']);
-});
-
-Route::get('/greeting', function () {
-    return view('blog.hello', ['name' => 'Aqueena']);
-});
-
-Route::get('/greeting', [WelcomeController::class, 'greeting']);
-
-
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
+Route::get('/user/hapus/{id}', [UserController::class, 'hapus']);
