@@ -5,36 +5,30 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class SalesModel extends Model
+class StokModel extends Model
 {
     use HasFactory;
 
-    protected $table = 't_penjualan';
-    protected $primaryKey = 'penjualan_id';
+    protected $table = "t_stok";
+    protected $primaryKey = "stok_id";
     protected $fillable = [
+        'barang_id',
         'user_id',
-        'pembeli',
-        'penjualan_kode',
-        'penjualan_tanggal'
+        'stok_jumlah'
     ];
-    protected $casts = [
-        'penjualan_tanggal' => 'datetime',
-        'created_at' => 'datetime',
-        'updated_at' => 'datetime',
-    ];
+
     public $timestamps = true; // Aktifkan timestamps
 
-    // Relasi ke user yang melakukan transaksi
-    public function user(): BelongsTo
+    // Relasi ke barang
+    public function barang(): BelongsTo
     {
-        return $this->belongsTo(UserModel::class, 'user_id', 'user_id');
+        return $this->belongsTo(BarangModel::class, 'barang_id', 'barang_id');
     }
 
-    // Relasi ke detail transaksi
-    public function details(): HasMany
+    // Relasi ke user
+    public function user(): BelongsTo
     {
-        return $this->hasMany(DetailSalesModel::class, 'penjualan_id', 'penjualan_id');
+        return $this->belongsTo(UserModel::class, 'user_id', 'user_id'); // Ganti User::class ke UserModel::class
     }
 }
