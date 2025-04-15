@@ -2,19 +2,30 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
 class WelcomeController extends Controller
 {
-    public function hello()
+        public function index()
     {
-        return 'Hello World';
-    }
+        $breadcrumb = (object) [
+            'title' => 'Selamat Datang',
+            'list'  => ['Home', 'Welcome']
+        ];
 
-    public function greeting()
-    {
-        return view('blog.hello')
-        -> with('name', 'Aqueena')
-        -> with('occupation', 'Astronaut'); //mengirim data ke view occupation="astronaut"
+        $activeMenu = 'dashboard';
+
+        // Data metrik untuk dashboard
+        $newOrders = 150;
+        $bounceRate = 53;
+        $userRegistrations = 44;
+        $uniqueVisitors = 65;
+
+        return view('welcome', [
+            'breadcrumb' => $breadcrumb,
+            'activeMenu' => $activeMenu,
+            'newOrders' => $newOrders,
+            'bounceRate' => $bounceRate,
+            'userRegistrations' => $userRegistrations,
+            'uniqueVisitors' => $uniqueVisitors
+        ]);
     }
 }
