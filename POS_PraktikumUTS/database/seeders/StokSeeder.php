@@ -13,11 +13,11 @@ class StokSeeder extends Seeder
         $data = [];
         for ($i = 1; $i <= 10; $i++) {
             $data[] = [
-                'stok_id' => $i,
                 'barang_id' => $i,
-                'user_id' => 3, // Staff
-                'stok_tanggal' => Carbon::now()->subDays(rand(1, 30))->toDateTimeString(),
+                'user_id' => 3,
                 'stok_jumlah' => rand(10, 100),
+                'created_at' => Carbon::now(), // Timestamp sekarang
+                'updated_at' => Carbon::now(),
             ];
         }
 
