@@ -3,9 +3,9 @@
     <div id="modal-master" class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Import Data User</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Import Data Pengguna</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
+                    <span aria-hidden="true">×</span>
                 </button>
             </div>
             <div class="modal-body">
@@ -14,7 +14,7 @@
                     <a href="{{ asset('template_user.xlsx') }}" class="btn btn-info btn-sm" download>
                         <i class="fa fa-file-excel"></i> Download
                     </a>
-                    <small id="error-kategori_id" class="error-text form-text text-danger"></small>
+                    <small id="error-template" class="error-text form-text text-danger"></small>
                 </div>
                 <div class="form-group">
                     <label>Pilih File</label>
@@ -40,24 +40,24 @@ $(document).ready(function() {
             },
         },
         submitHandler: function(form) {
-            var formData = new FormData(form); // Jadikan form ke FormData untuk menghandle file
-
+            var formData = new FormData(form); // Convert form to FormData to handle file upload
+            
             $.ajax({
                 url: form.action,
                 type: form.method,
-                data: formData, // Data yang dikirim berupa FormData
-                processData: false, // setting processData dan contentType ke false, untuk menghandle file
-                contentType: false,
+                data: formData,
+                processData: false, // Prevent jQuery from processing the data (needed for file upload)
+                contentType: false, // Prevent jQuery from setting content type (needed for file upload)
                 success: function(response) {
-                    if(response.status) { // jika sukses
+                    if (response.status) { // If successful
                         $('#myModal').modal('hide');
                         Swal.fire({
                             icon: 'success',
                             title: 'Berhasil',
                             text: response.message
                         });
-                        tableUser.ajax.reload(); // reload datatable
-                    } else { // jika error
+                        tableUser.ajax.reload(); // Reload the DataTable (assumes tableUser from user/index.blade.php)
+                    } else { // If there’s an error
                         $('.error-text').text('');
                         $.each(response.msgField, function(prefix, val) {
                             $('#error-'+prefix).text(val[0]);
@@ -77,7 +77,7 @@ $(document).ready(function() {
                     });
                 }
             });
-            return false;
+            return false; // Prevent default form submission
         },
         errorElement: 'span',
         errorPlacement: function(error, element) {

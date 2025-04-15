@@ -50,39 +50,29 @@
         }
 
         function showDetail(url) {
-            $.get(url, function (data) {
-                let html = `
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title">Detail Transaksi</h5>
-                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                </div>
-                                <div class="modal-body">
-                                    <table class="table table-sm">
-                                        <thead>
-                                            <tr>
-                                                <th>Nama Barang</th>
-                                                <th>Harga</th>
-                                                <th>Qty</th>
-                                                <th>Subtotal</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>`;
+            $('#myModal').load(url, function () {
+                $(this).modal('show');
 
-                data.details.forEach(detail => {
-                    html += `
-                            <tr>
-                                <td>${detail.barang.barang_nama}</td>
-                                <td>Rp ${Number(detail.harga).toLocaleString()}</td>
-                                <td>${detail.jumlah}</td>
-                                <td>Rp ${(detail.harga * detail.jumlah).toLocaleString()}</td>
-                            </tr>`;
+                // Handle print button after modal shown
+                $(this).find('.btn-success').off('click').on('click', function () {
+                    window.print();
                 });
+            });
+        }
+        function confirmDelete(url) {
+            Swal.fire({
+                title: 'Loading...',
+                html: 'Memuat formulir konfirmasi',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
 
-                html += `</tbody></table></div></div></div>`;
-
-                $('#myModal').html(html).modal('show');
+                    // Load modal konfirmasi
+                    $('#myModal').load(url, function () {
+                        $(this).modal('show');
+                        Swal.close();
+                    });
+                }
             });
         }
 
@@ -110,25 +100,25 @@
                         data: "penjualan_kode",
                         name: "penjualan_kode",
                         className: "text-center",
-                        width: "15%"
+                        width: "16%"
                     },
                     {
                         data: "pembeli",
                         name: "pembeli",
                         className: "text-left",
-                        width: "15%"
+                        width: "16%"
                     },
                     {
                         data: "penjualan_tanggal",
                         name: "penjualan_tanggal",
                         className: "text-center",
-                        width: "15%"
+                        width: "17%"
                     },
                     {
                         data: "total",
                         name: "total",
                         className: "text-right",
-                        width: "15%",
+                        width: "16%",
                         render: function (data) {
                             return `<span class="font-weight-bold">${data}</span>`;
                         }
@@ -143,7 +133,7 @@
                         data: "aksi",
                         name: "aksi",
                         className: "text-center",
-                        width: "20%",
+                        width: "15%",
                         orderable: false,
                         searchable: false
                     }
@@ -157,4 +147,4 @@
             });
         });
     </script>
-@endpush
+@endpush {{-- Pastikan @endpush ada dan tidak typo --}}

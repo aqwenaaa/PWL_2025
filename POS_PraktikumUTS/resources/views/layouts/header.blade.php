@@ -1,4 +1,4 @@
-<nav class="main-header navbar 0+navbar-expand navbar-white navbar-light">
+<nav class="main-header navbar navbar-expand navbar-white navbar-light">
   <!-- Left navbar links -->
   <ul class="navbar-nav">
     <li class="nav-item">
@@ -49,7 +49,7 @@
             <img src="adminlte/dist/img/user1-128x128.jpg" alt="User Avatar" class="img-size-50 mr-3 img-circle">
             <div class="media-body">
               <h3 class="dropdown-item-title">
-                Aqueena Regita Hapsari
+                Brad Diesel
                 <span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>
               </h3>
               <p class="text-sm">Call me whenever you can...</p>
@@ -131,11 +131,12 @@
         <i class="fas fa-th-large"></i>
       </a>
     </li>
+
     <!-- User profile dropdown -->
     <li class="nav-item dropdown user-menu">
       <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
         <img
-          src="{{ auth()->user()->foto_profil ? asset('storage/' . auth()->user()->foto_profil) : asset('adminlte/dist/img/avatar.png') }}"
+          src="{{ auth()->user()->foto_profil ? asset('storage/' . auth()->user()->foto_profil) : asset('adminlte/dist/img/default-profile.jpg') }}"
           class="user-image img-circle elevation-1" alt="User Image">
         <span class="d-none d-md-inline">{{ auth()->user()->nama }}</span>
       </a>
@@ -143,7 +144,7 @@
         <!-- User image -->
         <li class="user-header bg-primary">
           <img
-            src="{{ auth()->user()->foto_profil ? asset('storage/' . auth()->user()->foto_profil) : asset('adminlte/dist/img/avatar.png') }}"
+            src="{{ auth()->user()->foto_profil ? asset('storage/' . auth()->user()->foto_profil) : asset('adminlte/dist/img/default-profile.jpg') }}"
             class="img-circle elevation-2" alt="User Image">
           <p>
             {{ auth()->user()->nama }}

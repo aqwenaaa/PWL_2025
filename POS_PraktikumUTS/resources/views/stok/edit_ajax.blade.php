@@ -35,13 +35,13 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label>Nama Barang</label>
-                    <input type="text" class="form-control"
+                    <input type="text" class="form-control" 
                            value="{{ $stok->barang->barang_nama }}" readonly>
                 </div>
                 <div class="form-group">
                     <label>Jumlah Stok</label>
                     <input type="number" name="stok_jumlah" id="stok_jumlah"
-                           class="form-control" min="1"
+                           class="form-control" min="1" 
                            value="{{ $stok->stok_jumlah }}" required>
                     <small id="error-stok_jumlah" class="error-text form-text text-danger"></small>
                 </div>

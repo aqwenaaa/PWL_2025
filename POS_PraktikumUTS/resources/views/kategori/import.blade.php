@@ -1,9 +1,9 @@
-<form action="{{ url('/kategori/import_ajax') }}" method="POST" id="form-import" enctype="multipart/form-data">
+<form action="{{ url('/kategori/import_ajax') }}" method="POST" id="form-import-kategori" enctype="multipart/form-data">
     @csrf
     <div id="modal-master" class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Import Data kategori</h5>
+                <h5 class="modal-title">Import Data Kategori</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -32,7 +32,7 @@
 
 <script>
 $(document).ready(function() {
-    $("#form-import").validate({
+    $("#form-import-kategori").validate({
         rules: {
             file_kategori: {
                 required: true,
@@ -40,24 +40,24 @@ $(document).ready(function() {
             },
         },
         submitHandler: function(form) {
-            var formData = new FormData(form); // Jadikan form ke FormData untuk menghandle file
-
+            var formData = new FormData(form);
+            
             $.ajax({
                 url: form.action,
                 type: form.method,
-                data: formData, // Data yang dikirim berupa FormData
-                processData: false, // setting processData dan contentType ke false, untuk menghandle file
+                data: formData,
+                processData: false,
                 contentType: false,
                 success: function(response) {
-                    if(response.status) { // jika sukses
+                    if(response.status) {
                         $('#myModal').modal('hide');
                         Swal.fire({
                             icon: 'success',
                             title: 'Berhasil',
                             text: response.message
                         });
-                        tablekategori.ajax.reload(); // reload datatable
-                    } else { // jika error
+                        tableKategori.ajax.reload();
+                    } else {
                         $('.error-text').text('');
                         $.each(response.msgField, function(prefix, val) {
                             $('#error-'+prefix).text(val[0]);
@@ -68,7 +68,7 @@ $(document).ready(function() {
                             text: response.message
                         });
                     }
-                },
+                }
             });
             return false;
         },

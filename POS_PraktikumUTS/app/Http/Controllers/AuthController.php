@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\LevelModel;
+use App\Models\UserModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-use App\Models\UserModel;
-use App\Models\LevelModel;
 
-class LoginController extends Controller
+
+class AuthController extends Controller
 {
     public function login()
     {
@@ -19,7 +20,6 @@ class LoginController extends Controller
 
         return view('auth.login');
     }
-
 
     public function postlogin(Request $request)
     {
@@ -49,17 +49,17 @@ class LoginController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect('login');
+        return redirect('/login')->with('status', 'You have been logged out.');
     }
 
     public function register()
     {
         $levels = LevelModel::select('level_id', 'level_nama')->get();
-
+        
         return view('auth.register')->with('levels', $levels);
     }
 
-    public function postregister(Request $request)
+    public function postRegister(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'username' => 'required|string|unique:m_user,username',
@@ -89,4 +89,6 @@ class LoginController extends Controller
             'redirect' => url('/login')
         ]);
     }
+
+    
 }

@@ -63,24 +63,24 @@
                     </div>
                 </div>
 
-                <!-- Daftar Item -->
-                <div class="card">
+                <!-- Keranjang Belanja -->
+                <div class="card mt-4">
                     <div class="card-header bg-light">
-                        <h6 class="mb-0"><i class="fas fa-shopping-cart mr-2"></i>Keranjang Belanja</h6>
+                        <h6 class="mb-0"><i class="fas fa-shopping-basket mr-2"></i>Keranjang Belanja</h6>
                     </div>
                     <div class="card-body p-0">
                         <div class="table-responsive">
-                            <table class="table table-bordered table-hover mb-0">
+                            <table class="table table-hover mb-0">
                                 <thead class="bg-light">
                                     <tr>
-                                        <th width="35%">Nama Barang</th>
-                                        <th width="15%">Harga Satuan</th>
-                                        <th width="15%">Qty</th>
-                                        <th width="20%">Subtotal</th>
-                                        <th width="15%">Aksi</th>
+                                        <th width="40%">Barang</th>
+                                        <th width="15%" class="text-left">Harga</th>
+                                        <th width="15%" class="text-center">Qty</th>
+                                        <th width="20%" class="text-left">Subtotal</th>
+                                        <th width="10%"></th>
                                     </tr>
                                 </thead>
-                                <tbody id="items-list" class="small"></tbody>
+                                <tbody id="items-list"></tbody>
                             </table>
                         </div>
                     </div>
@@ -170,14 +170,14 @@
                 </td>
                 <td>Rp ${item.harga.toLocaleString()}</td>
                 <td>
-                    <input type="number" name="items[${index}][jumlah]"
-                           value="${item.jumlah}" min="1"
-                           class="form-control form-control-sm"
+                    <input type="number" name="items[${index}][jumlah]" 
+                           value="${item.jumlah}" min="1" 
+                           class="form-control form-control-sm" 
                            onchange="updateQty(${index}, this.value)">
                 </td>
                 <td>Rp ${subtotal.toLocaleString()}</td>
                 <td>
-                    <button type="button" class="btn btn-danger btn-sm"
+                    <button type="button" class="btn btn-danger btn-sm" 
                             onclick="removeItem(${index})">
                         <i class="fas fa-trash"></i>
                     </button>

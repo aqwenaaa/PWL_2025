@@ -11,11 +11,7 @@ class KategoriSeeder extends Seeder
     public function run()
     {
         $kategori = [
-            ['kategori_kode' => 'ELEC', 'kategori_nama' => 'Elektronik'],
-            ['kategori_kode' => 'FASH', 'kategori_nama' => 'Fashion'],
-            ['kategori_kode' => 'HERB', 'kategori_nama' => 'Herbal'],
-            ['kategori_kode' => 'TOYS', 'kategori_nama' => 'Mainan'],
-            ['kategori_kode' => 'HOME', 'kategori_nama' => 'Perabotan Rumah']
+            ['kategori_kode' => 'OTO', 'kategori_nama' => 'Otomotif'],
         ];
 
         DB::table('m_kategori')->insert($kategori);

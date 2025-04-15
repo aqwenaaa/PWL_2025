@@ -11,7 +11,7 @@
             <div class="modal-body">
                 @if($barang->isEmpty())
                     <div class="alert alert-warning">
-                        Semua barang sudah memiliki stok.
+                        Semua barang sudah memiliki stok. 
                         <a href="{{ url('/barang') }}">Tambah barang baru</a>
                     </div>
                 @else
@@ -27,7 +27,7 @@
                     </div>
                     <div class="form-group">
                         <label>Jumlah Stok</label>
-                        <input type="number" name="stok_jumlah" id="stok_jumlah"
+                        <input type="number" name="stok_jumlah" id="stok_jumlah" 
                                class="form-control" min="1" required>
                         <small id="error-stok_jumlah" class="error-text form-text text-danger"></small>
                     </div>

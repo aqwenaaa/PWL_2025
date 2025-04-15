@@ -1,6 +1,6 @@
 <!DOCTYPE html>
  <html lang="en">
-
+ 
  <head>
      <meta charset="utf-8">
      <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -18,14 +18,14 @@
      <!-- Theme style -->
      <link rel="stylesheet" href="{{ asset('adminlte/dist/css/adminlte.min.css') }}">
  </head>
-
+ 
  <body class="hold-transition login-page">
      <div class="login-box">
          <!-- /.login-logo -->
          <div class="card card-outline card-primary">
              <div class="card-header text-center"><a href="{{ url('/') }}" class="h1"><b>Admin</b>LTE</a></div>
              <div class="card-body">
-                 <p class="login-box-msg">Register user baru</p>
+                 <p class="login-box-msg">Register a new account</p>
                  <form action="{{ url('register') }}" method="POST" id="form-register">
                      @csrf
                      <div class="input-group mb-3">
@@ -38,7 +38,7 @@
                          </div>
                          <small id="error-username" class="error-text text-danger"></small>
                      </div>
-
+ 
                      <div class="input-group mb-3">
                          <input type="text" id="name" name="nama" class="form-control" placeholder="Name"
                              required>
@@ -49,7 +49,7 @@
                          </div>
                          <small id="error-name" class="error-text text-danger"></small>
                      </div>
-
+ 
                      <div class="input-group mb-3">
                          <input type="password" id="password" name="password" class="form-control"
                              placeholder="Password" required>
@@ -60,7 +60,7 @@
                          </div>
                          <small id="error-password" class="error-text text-danger"></small>
                      </div>
-
+ 
                      <div class="input-group mb-3">
                          <input type="password" id="password_confirmation" name="password_confirmation"
                              class="form-control" placeholder="Confirm Password" required>
@@ -71,7 +71,7 @@
                          </div>
                          <small id="error-password_confirmation" class="error-text text-danger"></small>
                      </div>
-
+ 
                      <div class="input-group mb-3">
                          <select id="level_id" name="level_id" class="form-control" required>
                              <option value="">Select Level</option>
@@ -86,7 +86,7 @@
                          </div>
                          <small id="error-level_id" class="error-text text-danger"></small>
                      </div>
-
+ 
                      <div class="row">
                          <div class="col-8">
                              <p>Already have an account? <a href="{{ url('/login') }}">Login</a></p>
@@ -204,5 +204,5 @@
          });
      </script>
  </body>
-
+ 
  </html>

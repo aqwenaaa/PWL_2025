@@ -1,9 +1,9 @@
-<form action="{{ url('/level/import_ajax') }}" method="POST" id="form-import" enctype="multipart/form-data">
+<form action="{{ url('/level/import_ajax') }}" method="POST" id="form-import-level" enctype="multipart/form-data">
     @csrf
     <div id="modal-master" class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Import Data level</h5>
+                <h5 class="modal-title">Import Data Level</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -32,7 +32,7 @@
 
 <script>
 $(document).ready(function() {
-    $("#form-import").validate({
+    $("#form-import-level").validate({
         rules: {
             file_level: {
                 required: true,
@@ -40,24 +40,24 @@ $(document).ready(function() {
             },
         },
         submitHandler: function(form) {
-            var formData = new FormData(form); // Jadikan form ke FormData untuk menghandle file
-
+            var formData = new FormData(form);
+            
             $.ajax({
                 url: form.action,
                 type: form.method,
-                data: formData, // Data yang dikirim berupa FormData
-                processData: false, // setting processData dan contentType ke false, untuk menghandle file
+                data: formData,
+                processData: false,
                 contentType: false,
                 success: function(response) {
-                    if(response.status) { // jika sukses
+                    if(response.status) {
                         $('#myModal').modal('hide');
                         Swal.fire({
                             icon: 'success',
                             title: 'Berhasil',
                             text: response.message
                         });
-                        tablelevel.ajax.reload(); // reload datatable
-                    } else { // jika error
+                        tableLevel.ajax.reload();
+                    } else {
                         $('.error-text').text('');
                         $.each(response.msgField, function(prefix, val) {
                             $('#error-'+prefix).text(val[0]);

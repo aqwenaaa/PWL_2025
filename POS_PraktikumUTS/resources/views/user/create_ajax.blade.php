@@ -3,7 +3,7 @@
     <div id="modal-master" class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Tambah Data User</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Tambah Data User</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -45,7 +45,7 @@
 
 <script>
 $(document).ready(function() {
-    $("#form-tambah").validate({
+    $("#form-tambah").validate({ 
         rules: {
             level_id: { required: true, number: true },
             username: { required: true, minlength: 3, maxlength: 20 },
@@ -54,26 +54,26 @@ $(document).ready(function() {
         },
         submitHandler: function(form) {
             $.ajax({
-                url: form.action,
+                url: form.action, 
                 type: form.method,
-                data: $(form).serialize(),
+                data: $(form).serialize(), 
                 success: function(response) {
-                    if(response.status) {
-                        $('#modal-master').modal('hide');
+                    if(response.status){
+                        $('#myModal').modal('hide'); 
                         Swal.fire({
-                            icon: 'success',
-                            title: 'Berhasil',
+                            icon: 'success', 
+                            title: 'Berhasil', 
                             text: response.message
                         });
                         dataUser.ajax.reload();
                     } else {
                         $('.error-text').text('');
                         $.each(response.msgField, function(prefix, val) {
-                            $('#error-' + prefix).text(val[0]);
+                            $('#error-'+prefix).text(val[0]);
                         });
                         Swal.fire({
                             icon: 'error',
-                            title: 'Terjadi Kesalahan',
+                            title: 'Terjadi Kesalahan', 
                             text: response.message
                         });
                     }
@@ -82,14 +82,14 @@ $(document).ready(function() {
             return false;
         },
         errorElement: 'span',
-        errorPlacement: function (error, element) {
-            error.addClass('invalid-feedback');
+        errorPlacement: function (error, element) { 
+            error.addClass('invalid-feedback'); 
             element.closest('.form-group').append(error);
         },
-        highlight: function (element) {
+        highlight: function (element, errorClass, validClass) {
             $(element).addClass('is-invalid');
         },
-        unhighlight: function (element) {
+        unhighlight: function (element, errorClass, validClass) {
             $(element).removeClass('is-invalid');
         }
     });
