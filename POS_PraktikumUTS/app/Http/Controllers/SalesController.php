@@ -52,7 +52,7 @@ class SalesController extends Controller
                 ->addColumn('nama', fn($s) => $s->user->nama ?? 'System')
                 ->addColumn('aksi', function ($s) {
                     return '<div class="text-center">' .
-                        '<button onclick="showDetail(\'' . route('penjualan.show_ajax', $s->penjualan_id) . '\')" class="btn btn-sm btn-info mr-1">Detail</button>' .
+                        '<button onclick="showDetail(\'' . route('penjualan.show', $s->penjualan_id) . '\')" class="btn btn-sm btn-info mr-1">Detail</button>' .
                         '<button onclick="confirmDelete(\'' . route('penjualan.delete_ajax', $s->penjualan_id) . '\')" class="btn btn-sm btn-danger">Hapus</button>' .
                         '</div>';
                 })
@@ -64,7 +64,7 @@ class SalesController extends Controller
     }
 
     // Menampilkan detail transaksi (GET /penjualan/{id})
-    public function show_ajax($id)
+    public function show($id)
     {
         $penjualan = SalesModel::with(['user', 'details.barang'])
             ->findOrFail($id);

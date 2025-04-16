@@ -1,4 +1,3 @@
-
 @if(!$penjualan)
 <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
@@ -25,9 +24,9 @@
         <div class="modal-body">
             <div class="receipt-container">
                 <div class="receipt-header text-center mb-4">
-                    <h3 class="mb-1">Toko Aditya Yuhanda</h3>
-                    <p class="mb-0">Jl. Teluk Ratai IV No. 15</p>
-                    <p class="mb-0">Telp: (021) 210738742</p>
+                    <h3 class="mb-1">NITIPDONG.NA STORE</h3>
+                    <p class="mb-0">Jl. Soekarno-Hatta No.9, Malang</p>
+                    <p class="mb-0">Telp: (021) 1235489674</p>
                 </div>
                 
                 <div class="receipt-body">
@@ -79,7 +78,7 @@
 
                 <div class="receipt-footer text-center mt-4">
                     <p class="mb-1">Terima kasih telah berbelanja</p>
-                    <p class="mb-0">Barang yang sudah dibeli tidak dapat dikembalikan</p>
+                    <p class="mb-0">Sehat selalu kakak-kakak!</p>
                 </div>
             </div>
         </div>

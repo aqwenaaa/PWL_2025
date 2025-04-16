@@ -41,7 +41,7 @@ class UserController extends Controller
     // Ambil data user dalam bentuk JSON untuk DataTables
     public function list(Request $request)
     {
-        $users = UserModel::select('username', 'nama', 'level_id')
+        $users = UserModel::select('user_id','username', 'nama', 'level_id')
             ->with('level');
 
         // Filter data user berdasarkan level_id
@@ -100,12 +100,10 @@ class UserController extends Controller
         ]);
     }
 
-    public function create_ajax()
+public function create_ajax()
     {
-        $level = LevelModel::select('level_id', 'level_nama')->get();
-
-        return view('user.create_ajax')
-            ->with('level', $level);
+        $levels = LevelModel::select('level_id', 'level_nama')->get();
+        return view('user.create_ajax', compact('levels'));
     }
 
     public function store_ajax(Request $request)
@@ -150,49 +148,42 @@ class UserController extends Controller
         return view('user.edit_ajax', ['user' => $user, 'level' => $level]);
     }
 
+    
+    // Update a user via AJAX
     public function update_ajax(Request $request, $id)
     {
-        // Cek apakah request berasal dari AJAX
-        if ($request->ajax() || $request->wantsJson()) {
-            $rules = [
-                'level_id'  => 'required|integer',
-                'username'  => 'required|max:20|unique:m_user,username,' . $id . ',user_id',
-                'nama'      => 'required|max:100',
-                'password'  => 'nullable|min:6|max:20'
-            ];
+        $user = UserModel::findOrFail($id);
 
-            // use Illuminate\Support\Facades\Validator;
-            $validator = Validator::make($request->all(), $rules);
+        $validator = Validator::make($request->all(), [
+            'username' => 'required|string|unique:m_user,username,' . $id . ',user_id',
+            'nama' => 'required|string|max:255',
+            'password' => 'nullable|string|min:5',
+            'level_id' => 'required|exists:m_level,level_id',
+        ]);
 
-            if ($validator->fails()) {
-                return response()->json([
-                    'status'   => false,  // respon json, true: berhasil, false: gagal
-                    'message'  => 'Validasi gagal.',
-                    'msgField' => $validator->errors() // menunjukkan field mana yang error
-                ]);
-            }
-
-            $check = UserModel::find($id);
-            if ($check) {
-                // Jika password tidak diisi, hapus dari request
-                if (!$request->filled('password')) {
-                    $request->request->remove('password');
-                }
-
-                $check->update($request->all());
-                return response()->json([
-                    'status'  => true,
-                    'message' => 'Data berhasil diupdate'
-                ]);
-            } else {
-                return response()->json([
-                    'status'  => false,
-                    'message' => 'Data tidak ditemukan'
-                ]);
-            }
+        if ($validator->fails()) {
+            return response()->json(['status' => false, 'errors' => $validator->errors()]);
         }
-        return redirect('/');
+
+        // Ensure the selected level is either 'Staff' or 'Manager'
+        $level = LevelModel::where('level_id', $request->level_id)->first();
+        if (!in_array($level->level_nama, ['Staff', 'Manager'])) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Invalid role selected. Only Staff or Manager roles are allowed.',
+            ]);
+        }
+
+        $user->update([
+            'username' => $request->username,
+            'nama' => $request->nama,
+            'password' => $request->password ? bcrypt($request->password) : $user->password,
+            'level_id' => $request->level_id,
+        ]);
+
+        return response()->json(['status' => true, 'message' => 'User updated successfully.']);
     }
+
 
     public function confirm_ajax(string $id)
     {

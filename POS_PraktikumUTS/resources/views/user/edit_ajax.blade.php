@@ -1,127 +1,176 @@
-@empty($user)
-    <div id="modal-master" class="modal-dialog modal-lg" role="document">
+<div class="modal fade" id="editModal{{ $user->user_id }}" tabindex="-1" role="dialog" aria-labelledby="editModalLabel{{ $user->user_id }}" aria-hidden="true">
+    <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Kesalahan</h5>
+                <h5 class="modal-title" id="editModalLabel{{ $user->user_id }}">Edit User</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
-                <div class="alert alert-danger">
-                    <h5><i class="icon fas fa-ban"></i> Kesalahan!!!</h5>
-                    Data yang anda cari tidak ditemukan
-                </div>
-                <a href="{{ url('/user') }}" class="btn btn-warning">Kembali</a>
-            </div>
-        </div>
-    </div>
-@else
-    <form action="{{ url('/user/' . $user->user_id . '/update_ajax') }}" method="POST" id="form-edit">
-        @csrf
-        @method('PUT')
-
-        <div id="modal-master" class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Edit Data User</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-
+            <form id="form-edit-{{ $user->user_id }}" action="{{ url('user/' . $user->user_id . '/update_ajax') }}" method="POST">
+                @csrf
+                @method('PUT')
                 <div class="modal-body">
-                    <div class="form-group">
-                        <label>Level Pengguna</label>
-                        <select name="level_id" id="level_id" class="form-control" required>
-                            <option value="">- Pilih Level -</option>
-                            @foreach($level as $l)
-                                <option value="{{ $l->level_id }}" {{ $l->level_id == $user->level_id ? 'selected' : '' }}>
-                                    {{ $l->level_nama }}
-                                </option>
+                    <!-- Username field with AdminLTE input group styling -->
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" id="username" name="username" value="{{ $user->username }}" placeholder="Username" required>
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-user"></span>
+                            </div>
+                        </div>
+                        <small id="error-username" class="text-danger w-100"></small>
+                    </div>
+                    <!-- Name field with AdminLTE input group styling -->
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" id="nama" name="nama" value="{{ $user->nama }}" placeholder="Name" required>
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-id-card"></span>
+                            </div>
+                        </div>
+                        <small id="error-nama" class="text-danger w-100"></small>
+                    </div>
+                    <!-- Password field with AdminLTE input group styling -->
+                    <div class="input-group mb-3">
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Password (leave blank to keep unchanged)">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-lock"></span>
+                            </div>
+                        </div>
+                        <small id="error-password" class="text-danger w-100"></small>
+                    </div>
+                    <!-- Role dropdown with AdminLTE input group styling -->
+                    <div class="input-group mb-3">
+                        <select class="form-control" id="level_id" name="level_id" required>
+                            <option value="" disabled>Select Role</option>
+                            @foreach ($levels as $level)
+                                <option value="{{ $level->level_id }}" {{ $user->level_id == $level->level_id ? 'selected' : '' }}>{{ $level->level_nama }}</option>
                             @endforeach
                         </select>
-                        <small id="error-level_id" class="error-text form-text text-danger"></small>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Username</label>
-                        <input value="{{ $user->username }}" type="text" name="username" id="username" class="form-control" required>
-                        <small id="error-username" class="error-text form-text text-danger"></small>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Nama</label>
-                        <input value="{{ $user->nama }}" type="text" name="nama" id="nama" class="form-control" required>
-                        <small id="error-nama" class="error-text form-text text-danger"></small>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Password</label>
-                        <input type="password" name="password" id="password" class="form-control">
-                        <small class="form-text text-muted">Abaikan jika tidak ingin mengubah password</small>
-                        <small id="error-password" class="error-text form-text text-danger"></small>
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-layer-group"></span>
+                            </div>
+                        </div>
+                        <small id="error-level_id" class="text-danger w-100"></small>
                     </div>
                 </div>
-
                 <div class="modal-footer">
-                    <button type="button" data-dismiss="modal" class="btn btn-warning">Batal</button>
-                    <button type="submit" class="btn btn-primary">Simpan</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
                 </div>
-            </div>
+            </form>
         </div>
-    </form>
+    </div>
+</div>
 
-    <script>
-        $(document).ready(function() {
-            $("#form-edit").validate({
-                rules: {
-                    level_id: { required: true, number: true },
-                    username: { required: true, minlength: 3, maxlength: 20 },
-                    nama: { required: true, minlength: 3, maxlength: 100 },
-                    password: { minlength: 6, maxlength: 20 }
+<script>
+    // Set up CSRF token for AJAX requests
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    $(document).ready(function() {
+        // Initialize jQuery validation for the edit form
+        $("#form-edit-{{ $user->user_id }}").validate({
+            rules: {
+                username: {
+                    required: true,
+                    minlength: 4,
+                    maxlength: 20
                 },
-                submitHandler: function(form) {
-                    $.ajax({
-                        url: form.action,
-                        type: form.method,
-                        data: $(form).serialize(),
-                        success: function(response) {
-                            if(response.status) {
-                                $('#myModal').modal('hide');
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'Berhasil',
-                                    text: response.message
-                                });
-                                dataUser.ajax.reload();
-                            } else {
-                                $('.error-text').text('');
-                                $.each(response.msgField, function(prefix, val) {
-                                    $('#error-' + prefix).text(val[0]);
-                                });
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'Terjadi Kesalahan',
-                                    text: response.message
-                                });
-                            }
-                        }
-                    });
-                    return false;
+                nama: {
+                    required: true,
+                    minlength: 2,
+                    maxlength: 50
                 },
-                errorElement: 'span',
-                errorPlacement: function(error, element) {
-                    error.addClass('invalid-feedback');
-                    element.closest('.form-group').append(error);
+                password: {
+                    minlength: 5
                 },
-                highlight: function(element, errorClass, validClass) {
-                    $(element).addClass('is-invalid');
-                },
-                unhighlight: function(element, errorClass, validClass) {
-                    $(element).removeClass('is-invalid');
+                level_id: {
+                    required: true
                 }
-            });
+            },
+            messages: {
+                username: {
+                    required: "Please enter a username.",
+                    minlength: "Username must be at least 4 characters.",
+                    maxlength: "Username cannot exceed 20 characters."
+                },
+                nama: {
+                    required: "Please enter a name.",
+                    minlength: "Name must be at least 2 characters.",
+                    maxlength: "Name cannot exceed 50 characters."
+                },
+                password: {
+                    minlength: "Password must be at least 5 characters."
+                },
+                level_id: {
+                    required: "Please select a role."
+                }
+            },
+            submitHandler: function(form) {
+                // Handle form submission via AJAX
+                $.ajax({
+                    url: form.action,
+                    type: form.method,
+                    data: $(form).serialize(),
+                    success: function(response) {
+                        if (response.status) {
+                            // Show success message and close modal
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success',
+                                text: response.message,
+                            }).then(function() {
+                                $('#editModal{{ $user->user_id }}').modal('hide');
+                                // Reload DataTables to reflect changes
+                                $('#userTable').DataTable().ajax.reload();
+                            });
+                        } else {
+                            // Clear previous errors
+                            $('.text-danger').text('');
+                            // Display new errors
+                            $.each(response.errors, function(key, val) {
+                                $('#error-' + key).text(val[0]);
+                            });
+                            // Show error message
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: response.message || 'Failed to update user.'
+                            });
+                        }
+                    },
+                    error: function(xhr) {
+                        // Handle unexpected errors
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Unexpected Error',
+                            text: 'Please try again later.'
+                        });
+                    }
+                });
+                return false; // Prevent default form submission
+            },
+            errorElement: 'span',
+            errorPlacement: function(error, element) {
+                // Place error messages below the input group
+                error.addClass('invalid-feedback');
+                element.closest('.input-group').next('.text-danger').append(error);
+            },
+            highlight: function(element) {
+                // Highlight invalid fields
+                $(element).addClass('is-invalid');
+            },
+            unhighlight: function(element) {
+                // Remove highlight from valid fields
+                $(element).removeClass('is-invalid');
+            }
         });
-    </script>
-@endempty
+    });
+</script>
