@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\SalesModel;
-use App\Models\DetailSalesModel;
 use App\Models\BarangModel;
 use App\Models\StokModel;
 use Illuminate\Support\Facades\Validator;
+use App\Models\DetailSalesModel;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -38,7 +38,7 @@ class SalesController extends Controller
                 ->addIndexColumn()
                 ->addColumn('penjualan_kode', fn($s) => $s->penjualan_kode)
                 ->addColumn('pembeli', fn($s) => $s->pembeli)
-                ->addColumn('penjualan_tanggal', function($s) {
+                ->addColumn('penjualan_tanggal', function ($s) {
                     return $s->penjualan_tanggal->format('d-m-Y H:i'); // Format lokal
                 })
                 ->addColumn('total', function ($s) {
@@ -52,8 +52,7 @@ class SalesController extends Controller
                 ->addColumn('nama', fn($s) => $s->user->nama ?? 'System')
                 ->addColumn('aksi', function ($s) {
                     return '<div class="text-center">' .
-                        '<button onclick="showDetail(\'' . route('penjualan.show', $s->penjualan_id) . '\')" class="btn btn-sm btn-info mr-1">Detail</button>' .
-                        '<button onclick="modalAction(\'' . route('penjualan.edit_ajax', $s->penjualan_id) . '\')" class="btn btn-sm btn-warning mr-1">Edit</button>' .
+                        '<button onclick="showDetail(\'' . route('penjualan.show_ajax', $s->penjualan_id) . '\')" class="btn btn-sm btn-info mr-1">Detail</button>' .
                         '<button onclick="confirmDelete(\'' . route('penjualan.delete_ajax', $s->penjualan_id) . '\')" class="btn btn-sm btn-danger">Hapus</button>' .
                         '</div>';
                 })
@@ -65,10 +64,14 @@ class SalesController extends Controller
     }
 
     // Menampilkan detail transaksi (GET /penjualan/{id})
-    public function show($id)
+    public function show_ajax($id)
     {
-        $sale = SalesModel::with(['details.barang'])->find($id);
-        return response()->json($sale);
+        $penjualan = SalesModel::with(['user', 'details.barang'])
+            ->findOrFail($id);
+
+        return view('penjualan.show_ajax', [
+            'penjualan' => $penjualan
+        ]);
     }
 
     public function create_ajax()
@@ -108,7 +111,7 @@ class SalesController extends Controller
         try {
             // Generate kode transaksi
             $lastId = SalesModel::max('penjualan_id') ?? 0;
-            $penjualan_kode = 'TRX' . str_pad($lastId + 1, 4, '0', STR_PAD_LEFT);
+            $penjualan_kode = 'PNJ' . str_pad($lastId + 1, 4, '0', STR_PAD_LEFT);
 
             // Simpan header transaksi
             $sale = SalesModel::create([
@@ -151,6 +154,36 @@ class SalesController extends Controller
             return response()->json([
                 'status' => false,
                 'message' => 'Gagal menyimpan transaksi: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+    // Method untuk tampilan konfirmasi hapus
+    public function confirm_ajax($id)
+    {
+        $penjualan = SalesModel::find($id);
+        return view('penjualan.confirm_ajax', compact('penjualan'));
+    }
+
+    // Method untuk proses hapus
+    public function delete_ajax($id)
+    {
+        try {
+            $penjualan = SalesModel::findOrFail($id);
+
+            // Hapus detail penjualan terlebih dahulu
+            $penjualan->details()->delete();
+
+            // Hapus header penjualan
+            $penjualan->delete();
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Data transaksi berhasil dihapus'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Gagal menghapus data: ' . $e->getMessage()
             ], 500);
         }
     }

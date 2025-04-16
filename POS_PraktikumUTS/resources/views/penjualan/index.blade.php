@@ -40,7 +40,7 @@
         data-width="75%"></div>
 @endsection {{-- Pastikan @section ditutup dengan benar --}}
 
-@push('js') {{-- Pastikan @push('js') ada --}}
+@push('js') 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment-with-locales.min.js"></script>
     <script>
         function modalAction(url = '') {
@@ -49,16 +49,13 @@
             });
         }
 
-        function showDetail(url) {
-            $('#myModal').load(url, function () {
-                $(this).modal('show');
-
                 // Handle print button after modal shown
-                $(this).find('.btn-success').off('click').on('click', function () {
-                    window.print();
-                });
+            function showDetail(url) {
+            $('#myModal').load(url, function () { //#myModal hanyalah container (penampung) untuk semua modal yang dimuat secara dinamis.
+                $('#modal-detail').modal('show'); // panggil modal dari dalam konten loaded
             });
         }
+
         function confirmDelete(url) {
             Swal.fire({
                 title: 'Loading...',
@@ -147,4 +144,5 @@
             });
         });
     </script>
-@endpush {{-- Pastikan @endpush ada dan tidak typo --}}
+@stack('js')
+@endpush 
